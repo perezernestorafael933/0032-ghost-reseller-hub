@@ -1,39 +1,14 @@
+# Render Blueprint for Jules Auto-Deploy & Preview Environments
+# Author: Perez, Ernesto Rafael ("Rafa") & Angelus AGI
+# Repo: 0032-ghost-reseller-hub
+
 services:
   - type: web
-    name: nexus-reseller-hub
+    name: 0032-ghost-reseller-hub
     env: python
+    plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: BOT_TOKEN_NEXUS
-        sync: false
-      - key: BOT_TOKEN_NOVA
-        sync: false
-      - key: BOT_TOKEN_DEVCORE
-        sync: false
-      - key: BOT_TOKEN_CYBERVAULT
-        sync: false
-      - key: TELEGRAM_BOT_TOKEN
-        sync: false
-      - key: RESELLER_API_KEY
-        sync: false
-      - key: RESELLER_BASE_URL
-        sync: false
-      - key: ADMIN_TELEGRAM_ID
-        sync: false
-      - key: DEPOSIT_WALLET_BSC
-        sync: false
-      - key: DEPOSIT_WALLET_TRON
-        sync: false
-      - key: DEPOSIT_WALLET_BTC
-        sync: false
-      - key: DEPOSIT_WALLET_SOL
-        sync: false
-      - key: SUPPLIER_WALLET_BSC
-        sync: false
-      - key: SUPPLIER_WALLET_TRON
-        sync: false
-      - key: RUN_MODE
-        value: webhook
-      - key: BASE_WEBHOOK_URL
-        value: https://nexus-reseller-hub.onrender.com
+      - key: PORT
+        value: 10000
