@@ -1,6 +1,7 @@
 # Render Blueprint for Jules Auto-Deploy & Preview Environments
 # Author: Perez, Ernesto Rafael ("Rafa") & Angelus AGI
 # Repo: 0032-ghost-reseller-hub
+# Protección de Minutos de Build: Solo compila ante cambios reales de código
 
 services:
   - type: web
@@ -8,7 +9,21 @@ services:
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port 10000
+    buildFilter:
+      paths:
+        - src/**
+        - app/**
+        - requirements.txt
+        - pyproject.toml
+        - render.yaml
+      ignoredPaths:
+        - docs/**
+        - book/**
+        - tests/**
+        - .specify/**
+        - "*.md"
+        - "*.txt"
     envVars:
       - key: PORT
         value: 10000

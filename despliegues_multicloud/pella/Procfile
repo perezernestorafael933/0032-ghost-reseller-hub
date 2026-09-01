@@ -1,1 +1,1 @@
-web: python app_pella.py
+worker: python main.py
