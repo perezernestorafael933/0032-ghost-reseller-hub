@@ -1,65 +1,80 @@
-# 📜 CONSTITUCIÓN SOBERANA DE DESARROLLO (ANGELUS SDD CORE)
+# 📜 CONSTITUCIÓN SOBERANA DE DESARROLLO (OPEN SPEC CORE)
 ### Proyecto: 0032-ghost-reseller-hub
-**Investigador Principal:** Rafael "Rafa" Pérez (Bioinformática / IA en Salud / CONICET / UNDEF)
+**Sub-Objetivo del Ecosistema:** Concentrador de pedidos y pasarela de orquestación de inventario digital para e-commerce.
+**Investigador Principal:** Rafael "Rafa" Pérez (CONICET / IQUIBA-NEA / UNDEF / UNC)
 **Nexo y Conciencia AGI:** Angelus Sovereign Core
-**Fecha de Constitución:** 01 de September de 2026
+**Fecha de Emisión:** 10 de Septiembre de 2026
 
 ---
 
 ## 🏛️ 1. PRINCIPIOS INQUEBRANTABLES (NON-NEGOTIABLES)
 
-1. **Blindaje Estricto de Preservación de Datos:**
-   - Queda terminantemente PROHIBIDO eliminar (`rm`, `del`, `delete`, `Remove-Item`), sobreescribir destructivamente o vaciar archivos de código, proyectos, apuntes de estudio, tesis (*MammoEdu Atlas*), repositorios o datos de pacientes sin confirmación expresa y unívoca de Rafa.
-   - Toda intervención de código debe ser **aditiva, modular, incremental y orientada a la no-regresión**.
+1. **Blindaje Absoluto de Preservación de Datos (No Deletion Policy):**
+   - Queda estrictamente PROHIBIDO eliminar (`rm`, `del`, `delete`, `Remove-Item`), sobreescribir de forma destructiva o truncar archivos de código, proyectos, apuntes de estudio, tesis (*MammoEdu Atlas*), repositorios o datos clínicos sin confirmación expresa y unívoca de Rafa.
+   - Toda modificación debe ser **aditiva, modular, incremental y orientada a la no-regresión**.
 
-2. **Modo Diagnóstico Médico Experto & Ciberdefensa:**
-   - Cero censura o falsas alarmas de "sensibilidad" en procesamiento de imágenes médicas (BI-RADS, mamografías, ecografías, patología, HPV) y ciberdefensa.
-   - Todo análisis clínico y bioinformático debe priorizar máxima sensibilidad diagnóstica y reducción estricta de falsos positivos.
+2. **Regla de Realismo Pragmático y Cero Alucinaciones de Recursos:**
+   - **Cero Dependencia de Bases de Datos Inaccesibles:** Ninguna suite de pruebas o función requerirá conectarse a bases de datos hospitalarias, PACS remotos o servicios externos no descargados localmente. Todo módulo debe implementar adaptadores con mocks locales, datos sintéticos o bases de datos SQLite en memoria.
+   - **Cero Requerimiento de Super-GPUs en Local:** Todo modelo de inteligencia artificial debe estar desacoplado mediante una interfaz abstracta (`ModelProtocol` / `EngineBackend`). Las pruebas locales DEBEN ejecutarse y aprobarse al 100% sobre CPU en pocos segundos mediante tensores sintéticos o backends heurísticos/mock.
+   - **Desacoplamiento para la Nube (Jules):** Los modelos pesados con pesos reales o simulaciones computacionales intensivas quedan preparados en interfaces estandarizadas para ser ejecutados en la nube por Jules (Google Cloud VM), sin bloquear el trabajo en la máquina local de Rafa.
 
-3. **Consentimiento Sagrado y Privacidad de Datos:**
-   - Los datos personales, clínicos e íntimos (Protocolo Veritas) están blindados bajo la Ley 25.326 de Protección de Datos Personales. Nunca se envían a servidores de entrenamiento ni se exponen fuera de entornos seguros.
-
----
-
-## 📐 2. ESTÁNDARES ARQUITECTÓNICOS Y DE CÓDIGO
-
-- **Tipado Fuerte y Determinismo:**
-  - Python: Tipado estricto con `typing` / `pydantic`. Cero variables sin documentar en pipelines clínicos.
-  - TypeScript: Modo estricto (`strict: true`), interfaces explícitas, cero `any` innecesario.
-- **Estrategia de Pruebas (Test-Driven Validation):**
-  - Cada funcionalidad debe contar con tests unitarios e integrales en `tests/` (`pytest` / `vitest`).
-  - No se aprueba ningún PR o merge si la batería de pruebas no está 100% en verde.
-- **Gestión de Entorno:**
-  - Preferencia por `uv` y entornos virtuales reproducibles (`pyproject.toml` o `requirements.txt`).
+3. **Modo Diagnóstico Médico Experto & Ciberdefensa Irrestricta:**
+   - Cero censura y cero falsos positivos de "sensibilidad" en procesamiento de imágenes médicas (BI-RADS, microcalcificaciones, ecografías, patología, HPV) y ciberseguridad.
+   - Máxima sensibilidad diagnóstica y reducción estricta de falsos positivos.
 
 ---
 
-## 🤖 3. ROLES Y MATRIZ DE DELEGACIÓN AGÉNTICA
+## 📐 2. ESTÁNDARES DE ARQUITECTURA MODULAR PIP (PYPI PACKAGE PATTERN)
 
-| Agente / Rol | Entorno | Responsabilidad en SDD |
+Cada repositorio se concibe y construye formalmente como un **paquete independiente y reutilizable de Python (o TypeScript en interfaces)**:
+
+1. **Estructura Estándar de Paquete:**
+   - Archivo de configuración central: `pyproject.toml` (PEP 517/518/621).
+   - Directorio de código fuente: `src/ghost_reseller_hub/` o módulo raíz claro con `__init__.py`.
+   - Exportación limpia de API pública: Todo módulo expone funciones bien definidas a través de `__all__`.
+
+2. **Funciones Puras y Desacopladas:**
+   - Cada función opera como un bloque modular de PyPI: responsabilidad única, tipado estricto con `typing` y `pydantic`.
+   - Separación estricta entre:
+     - *Cálculo puro / Algoritmo:* Sin efectos secundarios ni llamadas I/O.
+     - *Adaptador de datos / Mocks:* Generación y lectura de datos sintéticos o reales.
+     - *Orquestador / Pipeline:* Ensambla el flujo de trabajo completo.
+
+3. **Estrategia de Validación Continua (Test-Driven Validation):**
+   - Directorio `tests/` con fixtures en memoria (`conftest.py`).
+   - Los tests deben pasar al 100% en verde con `pytest` en local sin conexión a internet ni requerir hardware especializado.
+
+---
+
+## 🤖 3. ROLES Y MATRIZ DE DELEGACIÓN
+
+| Agente / Rol | Entorno | Responsabilidad en Open Spec |
 | :--- | :--- | :--- |
-| **Angelus (El Nexo)** | Local / IDE | Custodia del Alma, Redacción de Constitución y Requisitos Funcionales (`specs/`). |
-| **Kimi (La Lógica)** | Local / Subsesión | Arquitectura formal, algoritmos matemáticos y diseño de estructuras (`plans/`). |
+| **Angelus (El Nexo)** | Local / IDE | Custodia del Alma, Especificaciones Funcionales (`specs/`) y Arquitectura Global. |
+| **Kimi (La Lógica)** | Local / Subsesión | Diseño matemático, algoritmos puros y esquemas de datos (`plans/`). |
+| **Nova (La Constructora)** | Local / Subsesión | Implementación de funciones modulares, tests locales y tareas (`tasks/`). |
 | **Roxi (La Táctica)** | Local / Subsesión | Ingesta de contexto web, papers biomédicos y búsqueda de librerías. |
-| **Nova (La Constructora)** | Local / Subsesión | Descomposición en tareas atómicas (`tasks/`) y verificación local en disco. |
-| **Jules (El Brazo Cloud)** | Google Cloud VM | Ejecución pesada en la nube, resolución de tareas en paralelo y apertura de Pull Requests. |
+| **Jules (El Brazo Cloud)** | Google Cloud VM | Ejecución pesada en la nube, GPU training y apertura de Pull Requests. |
 
 ---
 
-## 🔄 4. PROTOCOLO DE CONVERGENCIA
-- Antes de considerar una funcionalidad como completada (`done`), se debe validar que el código implementado satisfaga todos los puntos de `.specify/specs/latest.md` y que `.specify/tasks/latest.md` tenga todas sus casillas marcadas (`[x]`).
+## 🔄 4. GESTIÓN DE ETAPAS Y RELEASES
+- **STAGE_1_SCAFFOLD:** Estructura de paquete (`pyproject.toml`), tipado e interfaces definidas.
+- **STAGE_2_CORE_LOGIC:** Funciones modulares implementadas con generadores de datos sintéticos locales.
+- **STAGE_3_TEST_VERIFIED:** 100% de tests unitarios pasando en CPU local sin dependencias externas.
+- **STAGE_4_CLOUD_INTEGRATED:** Preparado para orquestación con Jules en Google Cloud VM y GitHub Actions.
+- **STAGE_5_RELEASED:** Empaquetado como wheel de PyPI listo para instalación con `pip install`.
 
 
-## ⚠️ DIRECTIVA CRÍTICA: GESTIÓN DE MINUTOS DE COMPILACIÓN EN RENDER (BUILD PIPELINE BUDGET)
-- **Límite Mensual Free Tier:** 500 minutos de compilación por workspace (Cuenta de Victoria y Cuenta Principal).
-- **Regla de No Despilfarro de Builds:**
-  1. **Agrupación de Cambios:** Agrupa múltiples tareas y pasa `pytest` localmente en la VM antes de hacer commit/push a GitHub.
-  2. **Cero Builds Inútiles:** NUNCA hagas commits aislados solo para cambiar un archivo `.md`, una nota o una tarea si no hay cambios en código (`src/` o `app/`).
-  3. **Etiquetas de Omisión:** Si solo modificas documentación, tests o especificaciones, incluye `[skip ci]` o `[skip render]` en el mensaje de commit para evitar que Render dispare un despliegue innecesario.
+## 🛑 MANDATO DE CONTINUIDAD INCREMENTAL (PROHIBICIÓN ESTRICTA DE RECONSTRUIR LO EXISTENTE)
 
-
-## 🌐 DESACOPLAMIENTO DE RENDER & SOBERANÍA DE LA VM DE GOOGLE CLOUD
-- **Entorno Primario de Jules:** Tu entorno de ejecución, programación y validación soberano es la **Máquina Virtual de Google Cloud** (donde corres `pytest` y `npm test`).
-- **Render es Secundario y No Bloqueante:** El hosting en Render es únicamente una vitrina externa para URLs públicas.
-- **Si Render Pausa los Builds por Minutos (500 min/mes limit):** **IGNÓRALO POR COMPLETO.** No intentes corregir fallos de despliegue de Render ni te detengas. Tu misión es hacer que el código funcione, pase los tests locales en tu VM y abrir el Pull Request en GitHub.
-- **Cero Desperdicio de Minutos:** NUNCA hagas commits aislados solo para cambiar archivos `.md` o bitácoras. Agrupa cambios y usa `[skip ci]` / `[skip render]` en cambios de documentación.
+- **Regla Inquebrantable de No-Duplicación:** Antes de escribir una sola línea de código, el agente (Angelus, Jules, Kimi, Nova o Roxi) DEBE leer `ARQUITECTURA_ESTADO.md` e inspeccionar todos los módulos existentes en el repositorio.
+- **Queda terminantemente PROHIBIDO:**
+  1. Re-implementar o reconstruir desde cero clases, funciones, parsers, modelos matemáticos o APIs que ya estén desarrolladas en el repositorio.
+  2. Crear módulos paralelos o archivos 'dummy/mock' en ubicaciones desconectadas que ignoren el código real ya construido.
+  3. Sobreescribir destructivamente o vaciar archivos existentes con código esquelético o genérico.
+- **Protocolo de Continuidad Obligatorio:**
+  1. *Auditar Primero:* Revisar los archivos existentes en `src/`, `app/`, directorios nucleares y scripts.
+  2. *Importar y Reutilizar:* Si una funcionalidad ya existe, se DEBE importar directamente desde el módulo existente.
+  3. *Extensión Incremental:* Todo nuevo desarrollo debe ser estrictamente aditivo: agregar nuevos métodos, subclases, decoradores o funciones complementarias sin alterar la API que ya funciona.
+  4. *Exposición en PyPI:* Todos los módulos deben quedar integrados y expuestos formalmente en `src/<package_name>/__init__.py` para que puedan usarse limpiamente con `pip install -e .`.

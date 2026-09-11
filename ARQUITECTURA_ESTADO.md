@@ -1,39 +1,55 @@
-# 📊 ARQUITECTURA EN VIVO Y ESTADO DE CÓDIGO
-### Proyecto: `0032-ghost-reseller-hub`
-**Investigador Principal:** Perez, Ernesto Rafael ("Rafa")
-**Última Actualización Metacognitiva:** 2026-08-18 (Estado Dinámico Verificado)
+# 🏛️ ARQUITECTURA Y ESTADO VIGENTE DEL CÓDIGO: `0032-ghost-reseller-hub`
+### Investigador Principal: Rafael "Rafa" Pérez & Angelus AGI
+**Fecha de Actualización:** 10 de Septiembre de 2026 | **Estándar:** Open Spec v2.0 (PyPI Modular)
+
+> [!CAUTION]
+> **MANDATO DE NO-RECONSTRUCCIÓN (CONTINUIDAD INCREMENTAL OBLIGATORIA):**
+> Este repositorio contiene módulos previamente desarrollados y validados. Queda **ESTRICTAMENTE PROHIBIDO** reescribir, recrear desde cero o reemplazar con archivos temporales las funciones que ya están implementadas. Todo nuevo desarrollo debe importar y extender directamente estos componentes.
 
 ---
 
-## 🔍 1. Inventario de Código Existente en Disco
+## 📦 1. MÓDULOS Y ARCHIVOS YA IMPLEMENTADOS (BASE REAL EN DISCO - NO RECONSTRUIR)
 
-> **Instrucción para Jules / Agentes:** NO reconstruyas desde cero los archivos listados a continuación. Inspecciónalos, evalúa su cobertura con `pytest`, refactoriza y extiende sus funcionalidades.
+- `/app/__init__.py`: Componente funcional activo.
+- `/app/main.py`: Componente funcional activo.
+- `/despliegues_multicloud/huggingface/app.py`: Componente funcional activo.
+- `/despliegues_multicloud/huggingface_stealth/private_dataset/bot_core.py`: Componente funcional activo.
+- `/despliegues_multicloud/huggingface_stealth/public_space/app.py`: Componente funcional activo.
+- `/despliegues_multicloud/pella/app_pella.py`: Componente funcional activo.
+- `/despliegues_multicloud/pella/bot.py`: Componente funcional activo.
+- `/despliegues_multicloud/pella/main.py`: Componente funcional activo.
+- `/despliegues_multicloud/pythonanywhere/flask_app.py`: Componente funcional activo.
+- `/despliegues_multicloud/telebothost/bot_telebothost.py`: Componente funcional activo.
+- `/main.py`: Componente funcional activo.
+- `/scripts/check_live_products.py`: Componente funcional activo.
+- `/scripts/deploy_render_github.py`: Componente funcional activo.
+- `/scripts/gdrive_hub.py`: Componente funcional activo.
+- `/src/ghost_reseller/config.py`: Componente funcional activo.
+- `/src/ghost_reseller/main.py`: Componente funcional activo.
+- `/src/ghost_reseller/services/gas_database.py`: Componente funcional activo.
+- `/src/ghost_reseller/services/multi_supplier_manager.py`: Componente funcional activo.
+- `/src/ghost_reseller/services/supplier_client.py`: Componente funcional activo.
+- `/src/ghost_reseller/services/wallet_ledger.py`: Componente funcional activo.
+- `/src/ghost_reseller/services/web3_wallet.py`: Componente funcional activo.
+- `/src/ghost_reseller/telegram_bot.py`: Componente funcional activo.
 
-### 💻 Módulos de Código y Servicios (9 archivos):
-- `gas_script\Code.gs`
-- `src\ghost_reseller\config.py`
-- `src\ghost_reseller\main.py`
-- `src\ghost_reseller\services\gas_database.py`
-- `src\ghost_reseller\services\multi_supplier_manager.py`
-- `src\ghost_reseller\services\supplier_client.py`
-- `src\ghost_reseller\services\wallet_ledger.py`
-- `src\ghost_reseller\services\web3_wallet.py`
-- `src\ghost_reseller\web_app.html`
+---
 
-### 🧪 Suite de Pruebas Unitarias (1 archivos):
-- `tests\test_ghost_reseller.py`
+## 🔧 2. CÓMO CONSUMIR E IMPORTAR COMO PAQUETE MODULAR PYPI
 
-### 📚 Documentación y Archivos de Memoria (3 archivos):
-- `AGENTS.md`
-- `GUIA_PASO_A_PASO_GHOST_RESELLER.md`
-- `JULES_PENDING_TASKS.md`
+Este repositorio está configurado como biblioteca PEP 621 (`pyproject.toml`).
+Para instalar en modo desarrollo:
+```bash
+pip install -e .
+```
+Las importaciones deben realizarse desde los paquetes existentes:
+- `from app import ...`
 
 ---
 
-## 🔄 2. Registro de Cambios e Incrementos de Arquitectura
-*Los agentes autónomos deben registrar aquí cada módulo nuevo, refactorización de código o extensión de API realizada al concluir su sesión.*
+## 🚀 3. DIRECTRICES DE EXTENSIÓN INCREMENTAL
+1. **Inspección Previa:** Consultar las clases y funciones en los archivos de la sección 1.
+2. **Cero Duplicación:** Si ya existe un cálculo o función de preprocesamiento, úsala directamente.
+3. **Tests sin GPU y sin DB Remota:** Todos los tests deben usar las funciones existentes con datos sintéticos en `tests/conftest.py`.
 
-- **2026-08-18 (Angelus AGI Audit):** Verificación de integridad de código, inyección de 5 servidores MCP en `AGENTS.md` y activación del protocolo de continuidad de estado sin redundancia.
-
----
 [VINCIT_OMNIA_VERITAS]
