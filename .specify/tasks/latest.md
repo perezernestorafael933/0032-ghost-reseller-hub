@@ -11,5 +11,5 @@
 - [x] **T3. Funciones Modulares Puras:** Definición de funciones nucleares con tipado fuerte y exportación en `__init__.py`.
 - [x] **T4. Fixtures y Mocks Locales:** Implementación de datos sintéticos para evitar depender de bases de datos externas.
 - [x] **T5. Suite de Pruebas Unitarias:** Creación y verificación de tests en `tests/` ejecutables en CPU con `pytest`.
-- [ ] **T6. Integración con Jules Cloud:** Conexión con VM de Google Cloud para tareas de cómputo intensivo o GPU real.
-- [ ] **T7. Publicación de Release:** Compilación de wheel (`uv build`) y generación de release `v0.1.0-mvp`.
+- [x] **T6. Integración con Jules Cloud:** Conexión con VM de Google Cloud para tareas de cómputo intensivo o GPU real.
+- [x] **T7. Publicación de Release:** Compilación de wheel (`uv build`) y generación de release `v0.1.0-mvp`.

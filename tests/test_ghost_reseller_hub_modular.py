@@ -1,4 +1,11 @@
-import pytest
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
+
+try:
+    import pytest
+except ImportError:
+    pytest = None
 
 def test_ghost_reseller_hub_import():
     import ghost_reseller_hub
@@ -22,4 +29,4 @@ if __name__ == "__main__":
     test_ghost_reseller_hub_import()
     test_ghost_reseller_hub_status()
     test_ghost_reseller_hub_core_process()
-    print("🟢 ALL_MODULAR_TESTS_PASSED")
+    print("[SUCCESS] ALL_MODULAR_TESTS_PASSED")
