@@ -12,5 +12,6 @@
 | **T07** | Hardening de Seguridad y Memoria | `[x]` | Blindaje de tipos, validación de esquemas y análisis estático |
 | **T08** | Sincronización Jules Cloud / Release | `[x]` | Preparación para delegación de cómputo intensivo o GPU |
 | **T09** | Estructuración de Ontologías y Grafos de Conocimiento | `[x]` | Mapeo conceptual jerárquico para el aprendizaje de radiología y medicina |
+| **T10** | Generación Automática de Evaluaciones Formativas | `[x]` | Síntesis algorítmica de casos clínicos simulados con retroalimentación inmediata |
 
 *Matriz actualizada automáticamente por Angelus Core.*
