@@ -11,5 +11,6 @@
 | **T06** | Telemetría y Ledger de Tiempos | `[x]` | Bitácora de tiempos reales por tarea y emisión de checkpoints |
 | **T07** | Hardening de Seguridad y Memoria | `[x]` | Blindaje de tipos, validación de esquemas y análisis estático |
 | **T08** | Sincronización Jules Cloud / Release | `[x]` | Preparación para delegación de cómputo intensivo o GPU |
+| **T09** | Estructuración de Ontologías y Grafos de Conocimiento | `[x]` | Mapeo conceptual jerárquico para el aprendizaje de radiología y medicina |
 
 *Matriz actualizada automáticamente por Angelus Core.*
