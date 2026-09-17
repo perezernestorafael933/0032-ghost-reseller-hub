@@ -13,5 +13,6 @@
 | **T08** | Sincronización Jules Cloud / Release | `[x]` | Preparación para delegación de cómputo intensivo o GPU |
 | **T09** | Estructuración de Ontologías y Grafos de Conocimiento | `[x]` | Mapeo conceptual jerárquico para el aprendizaje de radiología y medicina |
 | **T10** | Generación Automática de Evaluaciones Formativas | `[x]` | Síntesis algorítmica de casos clínicos simulados con retroalimentación inmediata |
+| **T11** | Modelado Cognitivo y Prevención de Fatiga Mental | `[x]` | Detección de sobrecarga cognitiva y adaptación dinámica del ritmo de estudio |
 
 *Matriz actualizada automáticamente por Angelus Core.*

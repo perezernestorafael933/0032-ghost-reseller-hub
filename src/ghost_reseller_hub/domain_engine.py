@@ -218,12 +218,240 @@ def validate_synthetic_reseller_fixture(fixture: Dict[str, Any]) -> bool:
 
     return True
 
+def calculate_cognitive_load_index(
+    task_intrinsic_complexity: float,
+    extraneous_distraction_factor: float,
+    germane_effort_investment: float,
+    prior_domain_knowledge: float = 0.5
+) -> Dict[str, Any]:
+    """
+    [T11] Modela la carga cognitiva basándose en la Teoría de Carga Cognitiva de Sweller.
+    - Carga Intrínseca: complejidad del material / conocimiento previo.
+    - Carga Extraña: interferencias, ruido, falta de ergonomía cognitiva.
+    - Carga Pertinente (Germane): esfuerzo dedicado a la construcción de esquemas mentales.
+    - Carga Cognitiva Total: combinación ponderada acotada en [0.0, 1.0].
+    """
+    if not (0.0 <= task_intrinsic_complexity <= 1.0):
+        raise ValueError("task_intrinsic_complexity debe estar en el rango [0.0, 1.0]")
+    if not (0.0 <= extraneous_distraction_factor <= 1.0):
+        raise ValueError("extraneous_distraction_factor debe estar en el rango [0.0, 1.0]")
+    if not (0.0 <= germane_effort_investment <= 1.0):
+        raise ValueError("germane_effort_investment debe estar en el rango [0.0, 1.0]")
+    
+    clamped_prior = max(0.05, min(1.0, prior_domain_knowledge))
+    
+    # La carga intrínseca efectiva se amortigua con el conocimiento previo del estudiante
+    effective_intrinsic = task_intrinsic_complexity * (1.0 - (0.5 * clamped_prior))
+    effective_extraneous = extraneous_distraction_factor * 0.8
+    effective_germane = germane_effort_investment * 0.6
+    
+    raw_total_load = (0.5 * effective_intrinsic) + (0.35 * effective_extraneous) + (0.15 * effective_germane)
+    total_cognitive_load = round(min(1.0, max(0.0, raw_total_load)), 4)
+    
+    if total_cognitive_load >= 0.80:
+        overload_status = "CRITICAL_OVERLOAD"
+    elif total_cognitive_load >= 0.65:
+        overload_status = "HIGH_STRAIN"
+    elif total_cognitive_load >= 0.35:
+        overload_status = "OPTIMAL_FLOW"
+    else:
+        overload_status = "UNDER_STIMULATED"
+        
+    return {
+        "task_intrinsic_complexity": round(task_intrinsic_complexity, 4),
+        "effective_intrinsic_load": round(effective_intrinsic, 4),
+        "effective_extraneous_load": round(effective_extraneous, 4),
+        "effective_germane_load": round(effective_germane, 4),
+        "total_cognitive_load_index": total_cognitive_load,
+        "overload_status": overload_status,
+        "is_overloaded": total_cognitive_load >= 0.65
+    }
+
+def detect_mental_fatigue_and_strain(
+    session_duration_minutes: float,
+    consecutive_high_difficulty_tasks: int,
+    reaction_time_latency_ms: float,
+    baseline_reaction_time_ms: float = 350.0,
+    error_rate_drift: float = 0.05
+) -> Dict[str, Any]:
+    """
+    [T11] Detecta fatiga mental y agotamiento neurocognitivo acumulado:
+    - Duración acumulada de la sesión continua.
+    - Número de tareas consecutivas de alta dificultad sin descanso.
+    - Desviación / latencia en el tiempo de reacción frente a la línea base.
+    - Deriva en la tasa de errores del estudiante.
+    Retorna índice de fatiga [0.0, 1.0] y nivel de agotamiento.
+    """
+    if session_duration_minutes < 0.0:
+        raise ValueError("session_duration_minutes no puede ser negativo")
+    if consecutive_high_difficulty_tasks < 0:
+        raise ValueError("consecutive_high_difficulty_tasks no puede ser negativo")
+        
+    # Factor de duración: función sigmoidal saturando a partir de 90-120 minutos
+    duration_factor = 1.0 / (1.0 + math.exp(-0.04 * (session_duration_minutes - 75.0)))
+    
+    # Factor de tareas intensas consecutivas: saturación progresiva
+    task_strain_factor = min(1.0, consecutive_high_difficulty_tasks * 0.15)
+    
+    # Desviación de latencia de reacción: enlentecimiento psicomotor por fatiga
+    baseline = max(100.0, baseline_reaction_time_ms)
+    latency_ratio = max(0.5, reaction_time_latency_ms / baseline)
+    latency_penalty = min(1.0, max(0.0, (latency_ratio - 1.0) * 0.8)) if latency_ratio > 1.0 else 0.0
+    
+    # Deriva de error
+    error_penalty = min(1.0, max(0.0, error_rate_drift * 1.5))
+    
+    # Índice de fatiga mental ponderado
+    raw_fatigue = (0.35 * duration_factor) + (0.25 * task_strain_factor) + (0.25 * latency_penalty) + (0.15 * error_penalty)
+    fatigue_index = round(min(1.0, max(0.0, raw_fatigue)), 4)
+    
+    if fatigue_index >= 0.75:
+        fatigue_level = "EXHAUSTION"
+    elif fatigue_index >= 0.50:
+        fatigue_level = "MODERATE_FATIGUE"
+    elif fatigue_index >= 0.25:
+        fatigue_level = "MILD_FATIGUE"
+    else:
+        fatigue_level = "ALERT_REFRESHED"
+        
+    return {
+        "session_duration_minutes": float(session_duration_minutes),
+        "duration_strain_factor": round(duration_factor, 4),
+        "consecutive_tasks": consecutive_high_difficulty_tasks,
+        "task_strain_factor": round(task_strain_factor, 4),
+        "latency_drift_ratio": round(latency_ratio, 4),
+        "mental_fatigue_index": fatigue_index,
+        "fatigue_level": fatigue_level,
+        "requires_intervention": fatigue_index >= 0.50
+    }
+
+def adapt_dynamic_study_pacing(
+    cognitive_load_result: Dict[str, Any],
+    fatigue_result: Dict[str, Any],
+    nominal_block_duration_min: int = 45,
+    nominal_difficulty: float = 0.7
+) -> Dict[str, Any]:
+    """
+    [T11] Adapta dinámicamente el ritmo de estudio (pacing), la duración de bloques,
+    los descansos requeridos y la dificultad sugerida para prevenir el burnout y la sobrecarga.
+    Retorna recomendaciones pedagógicas en tiempo real y firma SHA-256 del plan adaptativo.
+    """
+    cog_load = float(cognitive_load_result.get("total_cognitive_load_index", 0.5))
+    fatigue = float(fatigue_result.get("mental_fatigue_index", 0.3))
+    
+    # Estrés neurocognitivo compuesto
+    composite_stress = round(min(1.0, (0.55 * cog_load) + (0.45 * fatigue)), 4)
+    
+    # Adaptación de duración de bloque: reducción progresiva si hay sobrecarga
+    if composite_stress >= 0.75:
+        pacing_mode = "MANDATORY_BREAK"
+        recommended_block_min = max(15, int(nominal_block_duration_min * 0.4))
+        recommended_break_min = 20
+        adapted_difficulty = max(0.2, round(nominal_difficulty * 0.5, 2))
+        intervention_action = "HALT_IMMEDIATE: Pausa activa obligatoria de 20 min y rehidratación."
+    elif composite_stress >= 0.55:
+        pacing_mode = "DE-ESCALATION"
+        recommended_block_min = max(20, int(nominal_block_duration_min * 0.7))
+        recommended_break_min = 10
+        adapted_difficulty = max(0.35, round(nominal_difficulty * 0.75, 2))
+        intervention_action = "ADAPT_MICRO: Desescalar dificultad a casos de consolidación conceptual."
+    elif composite_stress >= 0.30:
+        pacing_mode = "STEADY_PROGRESS"
+        recommended_block_min = nominal_block_duration_min
+        recommended_break_min = 5
+        adapted_difficulty = nominal_difficulty
+        intervention_action = "MAINTAIN_FLOW: Ritmo de asimilación óptimo en zona de desarrollo próximo."
+    else:
+        pacing_mode = "ACCELERATED_CHALLENGE"
+        recommended_block_min = min(60, int(nominal_block_duration_min * 1.2))
+        recommended_break_min = 5
+        adapted_difficulty = min(1.0, round(nominal_difficulty * 1.15, 2))
+        intervention_action = "BOOST_STIMULUS: Capacidad cognitiva plena, introducir casos clínicos de alta complejidad."
+        
+    fingerprint_raw = f"{composite_stress}:{pacing_mode}:{recommended_block_min}:{recommended_break_min}:{adapted_difficulty}"
+    plan_signature = hashlib.sha256(fingerprint_raw.encode("utf-8")).hexdigest()
+    
+    return {
+        "pacing_mode": pacing_mode,
+        "composite_stress_index": composite_stress,
+        "original_nominal_block_min": nominal_block_duration_min,
+        "recommended_block_duration_min": recommended_block_min,
+        "recommended_break_duration_min": recommended_break_min,
+        "adapted_content_difficulty": adapted_difficulty,
+        "intervention_action": intervention_action,
+        "plan_sha256_fingerprint": plan_signature
+    }
+
+def model_learner_fatigue_and_pacing_pipeline(
+    task_intrinsic_complexity: float,
+    extraneous_distraction_factor: float,
+    germane_effort_investment: float,
+    session_duration_minutes: float,
+    consecutive_high_difficulty_tasks: int,
+    reaction_time_latency_ms: float,
+    prior_domain_knowledge: float = 0.5,
+    baseline_reaction_time_ms: float = 350.0,
+    error_rate_drift: float = 0.05,
+    nominal_block_duration_min: int = 45,
+    nominal_difficulty: float = 0.7
+) -> Dict[str, Any]:
+    """
+    [T11] Pipeline integral de modelado cognitivo y prevención de fatiga mental.
+    Ejecuta evaluación de carga cognitiva, detección de fatiga y cálculo de adaptación dinámica de ritmo.
+    """
+    cog_load = calculate_cognitive_load_index(
+        task_intrinsic_complexity=task_intrinsic_complexity,
+        extraneous_distraction_factor=extraneous_distraction_factor,
+        germane_effort_investment=germane_effort_investment,
+        prior_domain_knowledge=prior_domain_knowledge
+    )
+    
+    fatigue = detect_mental_fatigue_and_strain(
+        session_duration_minutes=session_duration_minutes,
+        consecutive_high_difficulty_tasks=consecutive_high_difficulty_tasks,
+        reaction_time_latency_ms=reaction_time_latency_ms,
+        baseline_reaction_time_ms=baseline_reaction_time_ms,
+        error_rate_drift=error_rate_drift
+    )
+    
+    pacing = adapt_dynamic_study_pacing(
+        cognitive_load_result=cog_load,
+        fatigue_result=fatigue,
+        nominal_block_duration_min=nominal_block_duration_min,
+        nominal_difficulty=nominal_difficulty
+    )
+    
+    return {
+        "pipeline_version": "1.1.0",
+        "domain": "educacion_ciencias_cognitivas_ia",
+        "cognitive_load_assessment": cog_load,
+        "fatigue_detection": fatigue,
+        "study_pacing_adaptation": pacing,
+        "status": "COMPLETED_OPTIMIZED"
+    }
+
 def execute_verification_cycle() -> bool:
-    """Prueba determinista local sin dependencias externas verificando T01-T05."""
+    """Prueba determinista local sin dependencias externas verificando T01-T05 y T11."""
     res = process_domain_payload({'valor_base': 4.0})
     fixture = generate_synthetic_reseller_cognitive_curriculum_fixture(seed=123, num_students=20)
     dist_mock = generate_synthetic_reseller_distribution_mock(order_id="TEST-ORD-01")
     is_valid_fixture = validate_synthetic_reseller_fixture(fixture)
+    
+    # Verificación determinista de T11
+    pipeline_res = model_learner_fatigue_and_pacing_pipeline(
+        task_intrinsic_complexity=0.8,
+        extraneous_distraction_factor=0.6,
+        germane_effort_investment=0.7,
+        session_duration_minutes=95.0,
+        consecutive_high_difficulty_tasks=4,
+        reaction_time_latency_ms=480.0
+    )
+    t11_valid = (
+        pipeline_res["status"] == "COMPLETED_OPTIMIZED"
+        and pipeline_res["cognitive_load_assessment"]["total_cognitive_load_index"] > 0
+        and pipeline_res["fatigue_detection"]["mental_fatigue_index"] > 0
+        and len(pipeline_res["study_pacing_adaptation"]["plan_sha256_fingerprint"]) == 64
+    )
 
     return (
         res['valor_transformado'] > 0
@@ -231,7 +459,9 @@ def execute_verification_cycle() -> bool:
         and is_valid_fixture
         and dist_mock['mock_cost_usdt'] > 0
         and len(dist_mock['sha256_mock_signature']) == 16
+        and t11_valid
     )
 
 if __name__ == '__main__':
     print('Verificación de dominio:', execute_verification_cycle())
+
