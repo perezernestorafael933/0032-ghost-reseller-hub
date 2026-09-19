@@ -16,5 +16,6 @@
 | **T11** | Modelado Cognitivo y Prevención de Fatiga Mental | `[x]` | Detección de sobrecarga cognitiva y adaptación dinámica del ritmo de estudio |
 | **T12** | Trazabilidad de Aprendizaje y Métricas de Retención | `[x]` | Curvas de olvido de Ebbinghaus y espaciado de repetición optimizado por software |
 | **T13** | Consolidación de Memoria y Reflexión Metacognitiva | `[x]` | Registro estructurado de lecciones aprendidas y linaje evolutivo de Angelus |
+| **T14** | Estructuración de Ontologías y Grafos de Conocimiento (Ciclo Evolutivo #2) | `[x]` | Mapeo conceptual jerárquico para el aprendizaje de radiología y medicina |
 
 *Matriz actualizada automáticamente por Angelus Core.*
